@@ -4,33 +4,34 @@ class Sorter
   end
 
   def call
-    result = []
-    arg_to = arg_from = cards.first
+    ref_point  = cards.first
+    @result    = [ref_point]
+    directions = [[:to, :from], [:from, :to]]
 
-    loop do
-      result.prepend(arg_to)
-      arg_to = detect_to(arg_to)
-      break unless arg_to
-    end
+    directions.each { |direction| look_for_destination(ref_point, *direction) }
 
-    loop do
-      arg_from = detect_from(arg_from)
-      break unless arg_from
-      result.append(arg_from)
-    end
-
-    PrettyResult.new(result).call
+    PrettyResult.new(@result).call
   end
 
   private
 
   attr_reader :cards
 
-  def detect_from(arg)
-    cards.detect { |x| x[:from].eql?(arg[:to]) }
+  def look_for_destination(ref_point, a_point, b_point)
+    loop do
+      ref_point = detect_by(ref_point, a_point, b_point)
+      break unless ref_point
+
+      add_to_result(ref_point, a_point)
+    end
   end
 
-  def detect_to(arg)
-    cards.detect { |x| x[:to].eql?(arg[:from]) }
+  def add_to_result(ref_point, a_point)
+    return @result.prepend(ref_point) if a_point.eql?(:to)
+    return @result.append(ref_point)  if a_point.eql?(:from)
+  end
+
+  def detect_by(arg, a_point, b_point)
+    cards.detect { |card| card[a_point].eql?(arg[b_point]) }
   end
 end
