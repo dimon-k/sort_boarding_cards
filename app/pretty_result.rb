@@ -6,6 +6,7 @@ class PrettyResult
   def call
     result.map { |card| build_a_message(card) }
           .append(final_destination_message)
+          .join("\n")
   end
 
   private
