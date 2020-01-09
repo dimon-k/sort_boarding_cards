@@ -6,8 +6,8 @@ class SorterTest < Test::Unit::TestCase
   def setup
     @cards_list = [{ type: 'train', number: '78A', from: 'Madrid', to: 'Barcelona', seat: '45B' },
                    { type: 'airport bus', from: 'Barcelona', to: 'Gerona Airport' },
-                   { type: 'airplane', number: 'SK455', from: 'Gerona Airport', to: 'Stockholm', seat: '3A', gate: '45B', baggage_drop_counter: '344' },
-                   { type: 'airplane', number: 'SK22', from: 'Stockholm', to: 'New York JFK', seat: '7B', gate: '22', baggage_pick_up: 'true' }]
+                   { type: 'airplane', number: 'SK455', from: 'Gerona Airport', to: 'Stockholm', seat: '3A', gate: '45B', counter: '344' },
+                   { type: 'airplane', number: 'SK22', from: 'Stockholm', to: 'New York JFK', seat: '7B', gate: '22' }]
     @expected_result = ['Take train 78A from Madrid to Barcelona. Sit in seat 45B.',
                         'Take the airport bus from Barcelona to Gerona Airport. No seat assignment.',
                         'From Gerona Airport, take flight SK455 to Stockholm. Gate 45B, seat 3A. Baggage drop at ticket counter 344.',
@@ -16,7 +16,7 @@ class SorterTest < Test::Unit::TestCase
   end
 
   def test_sorting
-    result = Sorter.new(@cards_list).call
+    result = Sorter.new(@cards_list.shuffle).call
     assert_equal(@expected_result, result)
   end
 end
