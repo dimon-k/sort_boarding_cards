@@ -19,7 +19,7 @@ class Sorter
       result.append(arg_from)
     end
 
-    pretty_result(result)
+    PrettyResult.new(result).call
   end
 
   private
@@ -32,26 +32,5 @@ class Sorter
 
   def detect_to(arg)
     cards.detect { |x| x[:to].eql?(arg[:from]) }
-  end
-
-  def pretty_result(result)
-    result.map do |card|
-      case card[:type]
-      when 'train'
-        "Take #{card[:type]} #{card[:number]} from #{card[:from]} to #{card[:to]}. Sit in seat #{card[:seat]}."
-      when 'airport bus'
-        "Take the #{card[:type]} from #{card[:from]} to #{card[:to]}. No seat assignment."
-      when 'airplane'
-        "From #{card[:from]}, take flight #{card[:number]} to #{card[:to]}. Gate #{card[:gate]}, seat #{card[:seat]}. ".concat(baggage(card, result))
-      end
-    end.append('You have arrived at your final destination.')
-  end
-
-  def baggage(card, result)
-    if card.eql?(result.last)
-      "Baggage will we automatically transferred from your last leg."
-    else
-      "Baggage drop at ticket counter #{card[:counter]}."
-    end
   end
 end
