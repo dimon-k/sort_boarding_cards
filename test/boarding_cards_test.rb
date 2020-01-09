@@ -16,8 +16,15 @@ class SorterTest < Test::Unit::TestCase
   end
 
   def test_sorting
-    result = Sorter.new(@cards_list.shuffle).call
+    result = Sorter.new(@cards_list).call
     assert_equal(@expected_result, result)
+  end
+
+  def test_shuffled_sorting
+    10.times do
+      result = Sorter.new(@cards_list.shuffle).call
+      assert_equal(@expected_result, result)
+    end
   end
 end
 
